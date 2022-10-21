@@ -20,12 +20,12 @@ def load_report_table(table, obj):
         row.cells[4].text = obj[i]['visit']
         row.cells[6].text = obj[i]['result'].capitalize()
 
-        font_edit(row.cells[0], 6)
-        font_edit(row.cells[1], 6)
-        font_edit(row.cells[2], 6)
-        font_edit(row.cells[3], 6)
-        font_edit(row.cells[4], 6)
-        font_edit(row.cells[6], 6)
+        font_edit(row.cells[0], 12)
+        font_edit(row.cells[1], 9)
+        font_edit(row.cells[2], 9)
+        font_edit(row.cells[3], 12)
+        font_edit(row.cells[4], 12)
+        font_edit(row.cells[6], 12)
 
 
 class Report:

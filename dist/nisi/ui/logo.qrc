@@ -1,5 +1,0 @@
-<RCC>
-  <qresource prefix="newPrefix">
-    <file>NIS_LOGO.png</file>
-  </qresource>
-</RCC>

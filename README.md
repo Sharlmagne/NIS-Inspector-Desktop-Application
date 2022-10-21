@@ -16,3 +16,7 @@ NIS Inspector is a desktop application created to simplify the tedious tasks of 
 - report.py - class for the report
 - itinerary.py class for the itinerary
 - ui.py class for the gui including the bulk of the methods used to operate the program
+
+## Snapshots
+![itinerary_tab](ui/snapshot-1.png)
+![report_tab](ui/snapshot-2.png)

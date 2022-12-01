@@ -48,6 +48,9 @@ class MainWindow(QMainWindow):
         # Submit objective button
         self.submit_obj_btn.clicked.connect(self.get_objective_info)
 
+        # Open document button
+        self.open_document_btn.clicked.connect(self.open_document)
+
         # Save itinerary document
         self.print_itinerary_btn.clicked.connect(self.print_itinerary)
 
@@ -107,8 +110,18 @@ class MainWindow(QMainWindow):
             msg.setIcon(QMessageBox.Critical)
         msg.exec()
 
+    # Open the folder with save files and launch it from there.
+    def open_document(self):
+        # Open file dialog
+        filename = QFileDialog.getOpenFileName(self, "Open File", "files/word_docs", "Word files (*.docx)")
+        if filename[0] == "" or filename is None:
+            return
+
+        # Launch the document from the dialog box
+        os.startfile(filename[0])
+
     def load_file(self):
-        filename = QFileDialog.getOpenFileName(self, "Open File", "", "JSON files (*.json)")
+        filename = QFileDialog.getOpenFileName(self, "Open File", "files/word_docs/Saves_States", "JSON files (*.json)")
         if filename[0] == "" or filename is None:
             return
 
@@ -426,7 +439,10 @@ class MainWindow(QMainWindow):
 
     def save_to_document(self, name, save_type=None):
         filename = f"{name}-{self.reformat_date(self.period_start)}.docx"
-        filename_dir = self.save_file_dialog(filename)
+        default_dir = "files/word_docs"
+        default_filename = os.path.join(default_dir, filename)
+
+        filename_dir = self.save_file_dialog(default_filename)
 
         # Check if filename is empty
         if filename_dir == "" or filename_dir is None:
@@ -498,7 +514,6 @@ class MainWindow(QMainWindow):
         filename = QFileDialog.getSaveFileName(self, "Save word document", default_filename, "Word Document (*.docx)",
                                                options=option)
         return filename[0]
-
 # TODO #1 Update the results when loading - Done
 # TODO #2 Create exception for json file error
 # TODO #3 Allow edits to the itinerary - Partial

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>951</width>
+    <width>950</width>
     <height>733</height>
    </rect>
   </property>
@@ -498,6 +498,19 @@
        <string>Reset Table</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="open_document_btn">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>610</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Open Document</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="report_tab">
      <attribute name="title">
@@ -891,7 +904,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>951</width>
+     <width>950</width>
      <height>21</height>
     </rect>
    </property>

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "NIS Inspector"
-#define MyAppVersion "1.5.2"
+#define MyAppVersion "1.6.1"
 #define MyAppPublisher "Sharlmagne Henry"
 #define MyAppExeName "nisi.exe"
 
@@ -14,7 +14,7 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
-DefaultDirName={autopf}\My Program
+DefaultDirName={autopf}\NIS Inspector
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
@@ -29,7 +29,7 @@ WizardStyle=modern
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checked
 
 [Files]
 Source: "C:\Users\Sharlmagne Henry\PycharmProjects\nis_inspector_objectives\dist\nisi\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion

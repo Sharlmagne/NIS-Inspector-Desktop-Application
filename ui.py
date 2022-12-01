@@ -87,7 +87,8 @@ class MainWindow(QMainWindow):
         self.show()
 
     def load_autosave(self):
-        last_save_list = glob.glob("files/autosaves/*.json")
+        default_dir = os.path.expanduser("~/Desktop/NIS Saves/auto_saves")
+        last_save_list = glob.glob(f"{default_dir}/*.json")
 
         if not last_save_list:
             return
@@ -112,8 +113,10 @@ class MainWindow(QMainWindow):
 
     # Open the folder with save files and launch it from there.
     def open_document(self):
+        self.create_files_folder()  # Initialize folders
+        default_dir = os.path.expanduser("~/Desktop/NIS Saves/")
         # Open file dialog
-        filename = QFileDialog.getOpenFileName(self, "Open File", "files/word_docs", "Word files (*.docx)")
+        filename = QFileDialog.getOpenFileName(self, "Open File", default_dir, "Word files (*.docx)")
         if filename[0] == "" or filename is None:
             return
 
@@ -121,7 +124,9 @@ class MainWindow(QMainWindow):
         os.startfile(filename[0])
 
     def load_file(self):
-        filename = QFileDialog.getOpenFileName(self, "Open File", "files/word_docs/Saves_States", "JSON files (*.json)")
+        self.create_files_folder()  # Initialize folders
+        default_dir = os.path.expanduser("~/Desktop/NIS Saves/state_saves")
+        filename = QFileDialog.getOpenFileName(self, "Open File", default_dir, "JSON files (*.json)")
         if filename[0] == "" or filename is None:
             return
 
@@ -207,7 +212,7 @@ class MainWindow(QMainWindow):
 
         # Update all the tables
         self.update_itinerary_table()
-        self.save_to_json("files/autosaves", f"autosave-{datetime.date.today()}.json")
+        self.autosave()
 
     def reset_tables(self, data):
         # Initialize objectives
@@ -316,7 +321,7 @@ class MainWindow(QMainWindow):
             self.report_table.removeRow(current_row)
             del self.itinerary.objectives[current_row]
             self.itinerary.update_report()
-            self.save_to_json("files/autosaves", f"autosave-{datetime.date.today()}.json")
+            self.autosave()
 
     def update_report_table(self):
         self.report_table.blockSignals(True)
@@ -336,7 +341,7 @@ class MainWindow(QMainWindow):
             self.report_table.setCellWidget(row, 5, results_combo)
             row += 1
         self.get_heading()
-        self.save_to_json("files/autosaves", f"autosave-{datetime.date.today()}.json")
+        self.autosave()
         self.report_table.blockSignals(False)
 
     def set_combo_value(self, table, col, key):
@@ -373,7 +378,7 @@ class MainWindow(QMainWindow):
         # Get week ended date
         self.itinerary.report.week_ended = self.week_ended_date.text()
         self.get_heading()
-        self.save_to_json("files/autosaves", f"autosave-{datetime.date.today()}.json")
+        self.autosave()
         return True
 
     def get_results_combo_value(self, row, col):
@@ -439,9 +444,8 @@ class MainWindow(QMainWindow):
 
     def save_to_document(self, name, save_type=None):
         filename = f"{name}-{self.reformat_date(self.period_start)}.docx"
-        default_dir = "files/word_docs"
+        default_dir = os.path.expanduser("~/Desktop/NIS Saves/")
         default_filename = os.path.join(default_dir, filename)
-
         filename_dir = self.save_file_dialog(default_filename)
 
         # Check if filename is empty
@@ -477,8 +481,8 @@ class MainWindow(QMainWindow):
         filename_split = filename_dir.split("/")
 
         json_filedir = filename_dir.replace(filename_split[-1], '')
-        json_filedir += f"Saves_States"
-        json_filename = f"NISIOB_{json_filedate}.json"
+        json_filedir += f"state_saves"
+        json_filename = f"NISIOB_{json_filedate}_{save_type}.json"
 
         self.save_to_json(json_filedir, json_filename)
 
@@ -499,21 +503,56 @@ class MainWindow(QMainWindow):
         # Convert dictionary to json file
         json_data = json.dumps(data)
 
-        # Check if directory exist and create if necessary then save.
-        try:
-            os.mkdir(file_dir)
-        except OSError:
-            with open(file_dir+"/"+filename, "w") as file:
-                file.write(json_data)
-        else:
-            with open(file_dir+"/"+filename, "w") as file:
-                file.write(json_data)
+        # Save json file
+        with open(file_dir+"/"+filename, "w") as file:
+            file.write(json_data)
+
+        # # Check if directory exist and create if necessary then save. -- Omit
+        # try:
+        #     os.mkdir(file_dir)
+        # except OSError:
+        #     with open(file_dir+"/"+filename, "w") as file:
+        #         file.write(json_data)
+        # else:
+        #     with open(file_dir+"/"+filename, "w") as file:
+        #         file.write(json_data)
+
+    def autosave(self):
+        self.create_files_folder()
+        default_dir = os.path.expanduser("~/Desktop/NIS Saves/auto_saves")
+        self.save_to_json(default_dir, f"autosave-{datetime.date.today()}.json")
 
     def save_file_dialog(self, default_filename):
         option = QFileDialog.Options()
         filename = QFileDialog.getSaveFileName(self, "Save word document", default_filename, "Word Document (*.docx)",
                                                options=option)
         return filename[0]
+
+    @staticmethod
+    def create_files_folder():
+        default_dir = os.path.expanduser("~/Desktop/NIS Saves/")
+        auto_saves_dir = os.path.join(default_dir, "auto_saves")
+        state_saves_dir = os.path.join(default_dir, "state_saves")
+
+        if os.path.exists(default_dir):
+            pass
+        else:
+            os.mkdir(default_dir)
+
+        # Create auto_saves_dir
+        if os.path.exists(auto_saves_dir):
+            pass
+        else:
+            os.mkdir(auto_saves_dir)
+
+        # Create state_saves_dir
+        if os.path.exists(state_saves_dir):
+            pass
+        else:
+            os.mkdir(state_saves_dir)
+
+
+
 # TODO #1 Update the results when loading - Done
 # TODO #2 Create exception for json file error
 # TODO #3 Allow edits to the itinerary - Partial
